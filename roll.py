@@ -24,8 +24,8 @@ def raw():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Rolls dice")
-    parser.add_argument('rolls', type=int, help="Number of dice to roll")
-    parser.add_argument('faces', type=int, help="Number of faces/sides on the die")
+    parser.add_argument('rolls', type=int, nargs='?', default=1, help="Number of dice to roll (default: 1)")
+    parser.add_argument('faces', type=int, nargs='?', default=20, help="Number of faces/sides on the die (default: 20)")
 
     arg_group = parser.add_mutually_exclusive_group()
     arg_group.add_argument('-s', '--sum',
