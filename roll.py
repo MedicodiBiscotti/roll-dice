@@ -23,26 +23,26 @@ def raw():
     pass
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Rolls dice")
-    parser.add_argument('rolls', type=int, nargs='?', default=1, help="Number of dice to roll (default: 1)")
-    parser.add_argument('faces', type=int, nargs='?', default=20, help="Number of faces/sides on the die (default: 20)")
+    parser = argparse.ArgumentParser(description="rolls dice")
+    parser.add_argument('rolls', type=int, nargs='?', default=1, help="number of dice to roll (default: 1)")
+    parser.add_argument('faces', type=int, nargs='?', default=20, help="number of faces/sides on the die (default: 20)")
 
     arg_group = parser.add_mutually_exclusive_group()
     arg_group.add_argument('-s', '--sum',
         dest='op', action='store_const', const=sum_rolls, default=sum_rolls,
-        help="Sums the result of the rolls (default)")
+        help="sums the result of the rolls (default)")
 
     arg_group.add_argument('-a', '--advantage',# '--adv',
         dest='op', action='store_const', const=advantage,
-        help="Roll with advantage, i.e. take the highest of the rolls")
+        help="roll with advantage, i.e. take the highest of the rolls")
 
     arg_group.add_argument('-d', '--disadvantage',# '--dis',
         dest='op', action='store_const', const=disadvantage,
-        help="Roll with disadvantage, i.e. take the lowest of the rolls")
+        help="roll with disadvantage, i.e. take the lowest of the rolls")
 
     arg_group.add_argument('-r', '--raw',
         dest='op', action='store_const', const=raw,
-        help="Returns the resulting rolls in a list as is")
+        help="returns the resulting rolls in a list as is")
 
     args = parser.parse_args()
 
