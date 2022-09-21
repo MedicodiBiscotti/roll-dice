@@ -6,21 +6,37 @@ from typing import Callable
 def roll_dice(rolls: int, faces: int) -> list[int]:
     return [rnd.randint(1, faces) for i in range(rolls)]
 
-def main(rolls: int, faces: int, op: Callable) -> None:
-    print(roll_dice(rolls, faces))
-
-def sum_rolls(rolls: int, faces: int, results: list[int]) -> None:
+def sum_rolls(rolls: int, faces: int) -> None:
+    results = roll_dice(rolls, faces)
     sum_result = sum(results)
     expected_avg = (faces / 2 + 0.5) * rolls
+    return (results, sum_result, expected_avg)
 
-def advantage():
-    pass
+def advantage(rolls: int, faces: int):
+    rolls = max(2, rolls)
+    results = roll_dice(rolls, faces)
+    max_result = max(results)
+    return (results, max_result, "shit if I know")
 
-def disadvantage():
-    pass
+def disadvantage(rolls: int, faces: int):
+    rolls = max(2, rolls)
+    results = roll_dice(rolls, faces)
+    max_result = min(results)
+    return (results, max_result, "shit if I know")
 
-def raw():
-    pass
+def raw(rolls: int, faces: int):
+    return roll_dice(rolls, faces)
+
+def main(rolls: int, faces: int, op: Callable) -> None:
+    if op is raw:
+        print(op(rolls, faces))
+        return
+    
+    raw_results, result, expected_avg = op(rolls, faces)
+
+    print("You rolled: " + ', '.join(map(str,raw_results)))
+    print("Result: " + str(result))
+    print("With an expected value of " + str(expected_avg))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="rolls dice")
@@ -51,4 +67,4 @@ if __name__ == "__main__":
     #     args.sum = True
     print(args)
     
-    main(args.rolls, args.faces)
+    main(args.rolls, args.faces, args.op)
