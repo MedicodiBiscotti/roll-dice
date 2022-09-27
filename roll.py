@@ -32,6 +32,9 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
         print(op(rolls, faces))
         return
     
+    # Not accurate for advantage and disadvantage. Might need specific if's.
+    print(f"Rolling {rolls} d{faces} with a modifier of {modifier}")
+    print("===================================")
     raw_results, result, expected_avg = op(rolls, faces, modifier)
 
     print("You rolled: " + ', '.join(map(str,raw_results)))
@@ -66,6 +69,6 @@ if __name__ == "__main__":
     # sum is True by default if nothing else is specified
     # if not any([args.sum, args.advantage, args.disadvantage]):
     #     args.sum = True
-    print(args)
+    # print(args)
     
     main(args.rolls, args.faces, args.op, args.modifier)
