@@ -6,33 +6,33 @@ from typing import Callable
 def roll_dice(rolls: int, faces: int) -> list[int]:
     return [rnd.randint(1, faces) for i in range(rolls)]
 
-def sum_rolls(rolls: int, faces: int) -> None:
+def sum_rolls(rolls: int, faces: int, modifier: int) -> None:
     results = roll_dice(rolls, faces)
-    sum_result = sum(results)
-    expected_avg = (faces / 2 + 0.5) * rolls
+    sum_result = sum(results) + modifier
+    expected_avg = (faces / 2 + 0.5) * rolls + modifier
     return (results, sum_result, expected_avg)
 
-def advantage(rolls: int, faces: int):
+def advantage(rolls: int, faces: int, modifier: int):
     rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
-    max_result = max(results)
+    max_result = max(results) + modifier
     return (results, max_result, "shit if I know")
 
-def disadvantage(rolls: int, faces: int):
+def disadvantage(rolls: int, faces: int, modifier: int):
     rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
-    max_result = min(results)
+    max_result = min(results) + modifier
     return (results, max_result, "shit if I know")
 
 def raw(rolls: int, faces: int):
     return roll_dice(rolls, faces)
 
-def main(rolls: int, faces: int, op: Callable) -> None:
+def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
     if op is raw:
         print(op(rolls, faces))
         return
     
-    raw_results, result, expected_avg = op(rolls, faces)
+    raw_results, result, expected_avg = op(rolls, faces, modifier)
 
     print("You rolled: " + ', '.join(map(str,raw_results)))
     print("Result: " + str(result))
@@ -42,6 +42,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="rolls dice")
     parser.add_argument('rolls', type=int, nargs='?', default=1, help="number of dice to roll (default: 1)")
     parser.add_argument('faces', type=int, nargs='?', default=20, help="number of faces/sides on the die (default: 20)")
+    parser.add_argument('-m', '--modifier', type=int, default=0, help="modifier to add to the result")
 
     arg_group = parser.add_mutually_exclusive_group()
     arg_group.add_argument('-s', '--sum',
@@ -67,4 +68,4 @@ if __name__ == "__main__":
     #     args.sum = True
     print(args)
     
-    main(args.rolls, args.faces, args.op)
+    main(args.rolls, args.faces, args.op, args.modifier)
