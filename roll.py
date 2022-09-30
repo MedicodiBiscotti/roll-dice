@@ -16,13 +16,15 @@ def advantage(rolls: int, faces: int, modifier: int):
     rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
     max_result = max(results) + modifier
-    return (results, max_result, "shit if I know")
+    expected_avg = faces * rolls / (rolls + 1) + 0.5    # thank you, Matt Parker # m / (m + 1) * n + 0.5
+    return (results, max_result, expected_avg)
 
 def disadvantage(rolls: int, faces: int, modifier: int):
     rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
     max_result = min(results) + modifier
-    return (results, max_result, "shit if I know")
+    expected_avg = faces / (rolls + 1) + 0.5    # thank you, Matt Parker # 1 / (m + 1) * n + 0.5
+    return (results, max_result, expected_avg)
 
 def raw(rolls: int, faces: int):
     return roll_dice(rolls, faces)
@@ -39,7 +41,7 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
 
     print("You rolled: " + ', '.join(map(str,raw_results)))
     print("Result: " + str(result))
-    print("With an expected value of " + str(expected_avg))
+    print("With an expected value of " + str(round(expected_avg, 2)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="rolls dice")
