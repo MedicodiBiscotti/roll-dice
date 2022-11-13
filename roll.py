@@ -22,9 +22,9 @@ def advantage(rolls: int, faces: int, modifier: int):
 def disadvantage(rolls: int, faces: int, modifier: int):
     rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
-    max_result = min(results) + modifier
+    min_result = min(results) + modifier
     expected_avg = faces / (rolls + 1) + 0.5    # thank you, Matt Parker # 1 / (m + 1) * n + 0.5
-    return (results, max_result, expected_avg)
+    return (results, min_result, expected_avg)
 
 def raw(rolls: int, faces: int):
     return roll_dice(rolls, faces)
