@@ -13,14 +13,12 @@ def sum_rolls(rolls: int, faces: int, modifier: int) -> None:
     return (results, sum_result, expected_avg)
 
 def advantage(rolls: int, faces: int, modifier: int):
-    rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
     max_result = max(results) + modifier
     expected_avg = faces * rolls / (rolls + 1) + 0.5 + modifier     # thank you, Matt Parker # m / (m + 1) * n + 0.5
     return (results, max_result, expected_avg)
 
 def disadvantage(rolls: int, faces: int, modifier: int):
-    rolls = max(2, rolls)
     results = roll_dice(rolls, faces)
     min_result = min(results) + modifier
     expected_avg = faces / (rolls + 1) + 0.5 + modifier     # thank you, Matt Parker # 1 / (m + 1) * n + 0.5
@@ -34,12 +32,15 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
         print(op(rolls, faces))
         return
     
-    # Not accurate for advantage and disadvantage. Might need specific if's.
+    # adjust for advantage and disadvantage
+    if op in [advantage, disadvantage]:
+        rolls = max(2, rolls)
+
     print(f"Rolling {rolls} d{faces} with a modifier of {modifier}")
     print("===================================")
     raw_results, result, expected_avg = op(rolls, faces, modifier)
 
-    print("You rolled: " + ', '.join(map(str,raw_results)))
+    print("You rolled: " + ', '.join(map(str, raw_results)))
     print("Result: " + str(result))
     print("With an expected value of " + str(round(expected_avg, 2)))
 
