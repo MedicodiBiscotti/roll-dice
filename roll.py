@@ -2,6 +2,8 @@ import argparse
 import random as rnd
 from typing import Callable
 
+from modules.utils import separater_line
+
 
 def roll_dice(rolls: int, faces: int) -> list[int]:
     return [rnd.randint(1, faces) for i in range(rolls)]
@@ -40,8 +42,7 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
     faces_str = f"{faces}'s" if rolls > 1 else str(faces)  
     intro_str = f"Rolling {rolls} d{faces_str}{f' with a modifier of {modifier}' if modifier else ''}"
     print(intro_str)
-    # print('=' * len(intro_str))
-    print(f"{' Good luck ' if len(intro_str) >= 14 else ' GL ':=^{len(intro_str)}}")    # if the text isn't wanted, then you can just use '=' * len(intro)
+    print(separater_line(len(intro_str), middle=['Good luck', 'GL']))
 
     raw_results, result, expected_avg = op(rolls, faces, modifier)
     print("You rolled: " + ', '.join(map(str, raw_results)))        # all this just to get rid of the brackets. perhaps unwarranted.
