@@ -2,6 +2,7 @@ import argparse
 import random as rnd
 from typing import Callable
 
+import inflect
 from modules.utils import separater_line
 
 
@@ -45,7 +46,6 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
     print(separater_line(len(intro_str), middle=['Good luck', 'GL']))
 
     raw_results, result, expected_avg = op(rolls, faces, modifier)
-    # TODO consider using inflect for joining list
     print("You rolled: " + ', '.join(map(str, raw_results)))        # all this just to get rid of the brackets. perhaps unwarranted.
     print(f"Result: {result}")
     print(f"With an expected value of {round(expected_avg, 2)}")    # val:.2f will have trailing zeros. :.4g won't but converts to scientific notation if needed.
