@@ -38,13 +38,14 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
     if op in [advantage, disadvantage]:
         rolls = max(2, rolls)
     
-    # pluralize faces if there are multiple rolls. f-string doesn't allow backslashes.
-    faces_str = f"{faces}'s" if rolls > 1 else str(faces)  
-    intro_str = f"Rolling {rolls} d{faces_str}{f' with a modifier of {modifier}' if modifier else ''}"
+    # pluralize faces if there are multiple rolls.
+    # f-string doesn't allow backslashes so you have to either define the desired string as a variable, or use docstring
+    intro_str = f"""Rolling {rolls} d{faces}{"'s"[:2*rolls^2]}{f" with a modifier of {modifier}" if modifier else ""}"""
     print(intro_str)
     print(separater_line(len(intro_str), middle=['Good luck', 'GL']))
 
     raw_results, result, expected_avg = op(rolls, faces, modifier)
+    # TODO consider using inflect for joining list
     print("You rolled: " + ', '.join(map(str, raw_results)))        # all this just to get rid of the brackets. perhaps unwarranted.
     print(f"Result: {result}")
     print(f"With an expected value of {round(expected_avg, 2)}")    # val:.2f will have trailing zeros. :.4g won't but converts to scientific notation if needed.
