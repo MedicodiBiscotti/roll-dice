@@ -2,12 +2,12 @@ import argparse
 import random as rnd
 from typing import Callable
 
-import inflect
 from modules.utils import separater_line
 
 
 def roll_dice(rolls: int, faces: int) -> list[int]:
     return [rnd.randint(1, faces) for i in range(rolls)]
+
 
 def sum_rolls(rolls: int, faces: int, modifier: int) -> None:
     results = roll_dice(rolls, faces)
@@ -15,11 +15,13 @@ def sum_rolls(rolls: int, faces: int, modifier: int) -> None:
     expected_avg = (faces / 2 + 0.5) * rolls + modifier
     return (results, sum_result, expected_avg)
 
+
 def advantage(rolls: int, faces: int, modifier: int):
     results = roll_dice(rolls, faces)
     max_result = max(results) + modifier
     expected_avg = faces * rolls / (rolls + 1) + 0.5 + modifier     # thank you, Matt Parker # m / (m + 1) * n + 0.5
     return (results, max_result, expected_avg)
+
 
 def disadvantage(rolls: int, faces: int, modifier: int):
     results = roll_dice(rolls, faces)
@@ -27,8 +29,10 @@ def disadvantage(rolls: int, faces: int, modifier: int):
     expected_avg = faces / (rolls + 1) + 0.5 + modifier     # thank you, Matt Parker # 1 / (m + 1) * n + 0.5
     return (results, min_result, expected_avg)
 
+
 def raw(rolls: int, faces: int):
     return roll_dice(rolls, faces)
+
 
 def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
     if op is raw:
@@ -49,6 +53,7 @@ def main(rolls: int, faces: int, op: Callable, modifier: int) -> None:
     print("You rolled: " + ', '.join(map(str, raw_results)))        # all this just to get rid of the brackets. perhaps unwarranted.
     print(f"Result: {result}")
     print(f"With an expected value of {round(expected_avg, 2)}")    # val:.2f will have trailing zeros. :.4g won't but converts to scientific notation if needed.
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="rolls dice")
