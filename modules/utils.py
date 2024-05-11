@@ -1,12 +1,19 @@
 from typing import Union
 
-# TODO generally make more flexible:
-# TODO      spacer character as either str (mirror on other side of the word) or list for both sides, default=' '
-# TODO      start end end characters as either str (mirror on other side) or list for both sides, default=None
-# TODO With all of these, calculating if the text can fit is more complicated.
-# TODO If you change the implementation of the fill, you could maybe take a string of more than one character.
+# I had an idea for how to extend this shit to all hell. If you could give it a parameter for number of sections to create,
+# then you would also figure out those chunks should be organised most neatly.
+# I figured out some logic for it, but it's way too complicated for this project at the moment.
+
+# TODO start end end characters as either str (mirror on other side) or list for both sides, default=None
 # Union can be replaced with str | list[str] in version >= 3.10
-def separater_line(max_length: int, char: str='=', middle: Union[str, list[str]]=None, buffer: int=2, spacer: Union[str, list[str]]=' ') -> str:
+def separater_line(
+    max_length: int,
+    char: str='=',
+    middle: Union[str, list[str]]=None,
+    buffer: int=2,
+    spacer: Union[str, list[str]]=' ',
+    terminator: Union[str, list[str]]=[]    # default empty list seems a little odd.
+) -> str:
     """Returns a line of the given character with optional text in the middle.
 
     If middle text is a list, the longest string that can comfortably fit in the length will be used.
@@ -33,12 +40,19 @@ def separater_line(max_length: int, char: str='=', middle: Union[str, list[str]]
     # if spacer is a string, make it a list but mirror the second element
     if isinstance(spacer, str):
         spacer = [spacer, spacer[::-1]]
+        
+    # do the same with terminator
+    # if we really need to do the same exact thing, then it should be a function.
+    # If you do that, make sure to also fix if list is given but with length 1.
+    if isinstance(terminator, str):
+        terminator = [terminator, terminator[::-1]]
 
-    combined_buffer = buffer*2 + sum(map(len, spacer))
+    combined_buffer = buffer*2 + sum(map(len, spacer + terminator))
 
     # find the longest middle string that can fit in the length
     for mid in middle:
         if can_fit(max_length, mid, buffer=combined_buffer):
+            # TODO add terminator before and after the line. Terminator length should be subracted from the fill length.
             return f"{spacer[0] + mid + spacer[1]:{char}^{max_length}}"
     
     # if no middle string can fit, return simple line
